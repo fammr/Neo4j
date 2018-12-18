@@ -147,15 +147,15 @@
 	       }); 
 	   };
 	   
-	   var deletedomain= function(value){
+	   var deletedomain= function(id,value){
 		   var _this=this;
 		   _this.$confirm('此操作将删除该标签及其下节点和关系(不可恢复), 是否继续?', '三思而后行', {
 		          confirmButtonText: '确定',
 		          cancelButtonText: '取消',
 		          type: 'warning'
 		        }).then(() => {
-		        	var domainstr= value.substring(1,value.length-1);
-		        	var data = {domain:domainstr};
+		        	var domainstr= value.substring(0,value.length);
+		        	var data = {domainid:id,domain:domainstr};
 	        	       $.ajax({
 	        	           data: data,
 	        	           type: "POST",
@@ -698,7 +698,7 @@
 	       // 更新节点标识
            var nodesymbol = nodesymbolGroup.selectAll("path").data(nodes,function(d) { return d.uuid; });
            nodesymbol.exit().remove();
-           var nodesymbolEnter = _this.drawnodesymbol(nodesymbol);
+           var nodesymbolEnter = drawnodesymbol(nodesymbol);
            nodesymbol = nodesymbolEnter.merge(nodesymbol);
            nodesymbol.attr("fill","#e15500");
            nodesymbol.attr("display",function (d) {
@@ -894,6 +894,7 @@
 			 linktextGroup = svg.append("g").attr("class", "linetext");
 			 nodeGroup = svg.append("g").attr("class", "node");
 			 nodetextGroup = svg.append("g").attr("class", "nodetext");
+			nodesymbolGroup = svg.append("g").attr("class", "nodesymbol");
 			 s.on("contextmenu",function(){
 		         let [x, y] = d3.mouse(this);
 		     	   let { translate, scale } = getTranslateAndScale();		       
